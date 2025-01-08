@@ -14,7 +14,7 @@ size = Vector2(688, 18.5)
 size = Vector2(554, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6q05h"]
-size = Vector2(40.7216, 20.0719)
+size = Vector2(632, 320)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_ryb73")
@@ -50,7 +50,7 @@ rotation = 1.5708
 shape = SubResource("RectangleShape2D_rrg7l")
 
 [node name="Ceiling" type="CollisionShape2D" parent="Boundaries"]
-position = Vector2(320, -17.25)
+position = Vector2(328, -8)
 shape = SubResource("RectangleShape2D_uq53f")
 
 [node name="Lives" type="Label" parent="."]
@@ -82,8 +82,7 @@ shape = SubResource("RectangleShape2D_2w5jv")
 position = Vector2(8, 64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BrickArea"]
-position = Vector2(316, 111.6)
-scale = Vector2(15.52, 11.12)
+position = Vector2(316, 160)
 shape = SubResource("RectangleShape2D_6q05h")
 
 [connection signal="collided" from="Ball" to="." method="_on_ball_collided"]

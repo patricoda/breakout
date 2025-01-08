@@ -4,11 +4,45 @@ extends Node
 var score = 0;
 var lives = 3; 
 
-var brick_scene = preload("res://brick.tscn")
+var levelPaths = [
+	'res://levels/level1bricks.tscn'
+];
+
+var brick_scene = preload("res://brick.tscn");
 
 func _ready():
+	#generate_bricks();
+	load_level("level1bricks");
 	start_new_round();
 
+func load_level(levelName):
+	var level = preload("res://levels/level1bricks.tscn").instantiate();
+	$BrickArea.add_child(level);
+	
+	
+#func generate_bricks():
+	#generate_brick_row();
+	#
+#func generate_brick_row():
+	#var brickAreaDimensions = $BrickArea/CollisionShape2D.get_shape().size;
+	#
+	##instantiate to get dimensions
+	#var refBrick = brick_scene.instantiate();
+	#var brickDimensions = refBrick.get_node("CollisionShape2D").get_shape().size;
+	#brickDimensions.x = brickAreaDimensions.x / 5;
+#
+	#var brickPosition = 0;
+	#for i in range(ceil(brickAreaDimensions.x / brickDimensions.x)):
+		#var newBrick = brick_scene.instantiate();
+		#var prefix = "brick";
+		#newBrick.name = prefix + str(i)
+		#
+		#$BrickArea.add_child(newBrick);
+		#newBrick.position.x = brickPosition;
+		#brickPosition += brickDimensions.x
+		#
+		#newBrick.add_to_group('bricks');
+	
 func update_score():
 	score += 1;
 	update_score_display();
@@ -27,10 +61,6 @@ func update_lives_display():
 func start_new_round():
 	$Ball.position = Vector2($Arena.size.x / 2, $Arena.size.y / 2);
 	$Ball.velocity = Vector2(randf_range(-300, 300), ball_velocity if randi_range(0, 1) == 1 else -ball_velocity);
-	var brick = brick_scene.instantiate();
-	$BrickArea.add_child(brick);
-	brick.add_to_group('bricks');
-	#todo: add bricks to the bricks group, lay them out
 
 func _on_ball_collided(col):
 	if col.get_collider().is_in_group('bricks'):
