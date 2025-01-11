@@ -1,7 +1,9 @@
 extends Node
 
 @export var currentLevel = 0;
-@export var ball_velocity = 1200;
+@export var ball_speed = 600;
+@export var ball_speed_increment = 50;
+
 var score = 0;
 var lives = 3; 
 var activeBricks = 0;
@@ -17,7 +19,7 @@ func _ready():
 	
 func init_round():
 	load_level();
-	start_new_round();
+	start_round();
 
 func load_level():
 	var level = load(levelPaths[currentLevel]).instantiate();
@@ -38,9 +40,10 @@ func update_lives():
 func update_lives_display():
 	$Lives.text = str(lives);
 	
-func start_new_round():
+func start_round():
+	$Ball.speed = ball_speed
 	$Ball.position = Vector2($Arena.size.x / 2, $Arena.size.y / 2);
-	$Ball.velocity = Vector2(randf_range(-300, 300), -ball_velocity);
+	$Ball.velocity = Vector2(randf_range(-300, 300), -ball_speed);
 
 func _on_ball_collided(col):
 	if col.get_collider().is_in_group('bricks'):
@@ -53,10 +56,12 @@ func handle_brick_collision(brick):
 	
 	if(activeBricks == 0):
 		handle_level_complete();
+	else:
+		$Ball.adjust_speed(ball_speed_increment);
 	
 func handle_level_complete():
 	init_round();
 
 func _on_kill_zone_body_entered(body):
 	update_lives();
-	start_new_round();
+	start_round();

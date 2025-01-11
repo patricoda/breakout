@@ -18,7 +18,7 @@ size = Vector2(632, 320)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_ryb73")
-ball_velocity = 800
+ball_speed_increment = 200
 
 [node name="Arena" type="ColorRect" parent="."]
 anchors_preset = 15
