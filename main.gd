@@ -1,47 +1,28 @@
 extends Node
 
+@export var currentLevel = 0;
 @export var ball_velocity = 1200;
 var score = 0;
 var lives = 3; 
+var activeBricks = 0;
 
-var levelPaths = [
+const levelPaths = [
 	'res://levels/level1bricks.tscn'
 ];
 
 var brick_scene = preload("res://brick.tscn");
 
 func _ready():
-	#generate_bricks();
-	load_level("level1bricks");
+	init_round();
+	
+func init_round():
+	load_level();
 	start_new_round();
 
-func load_level(levelName):
-	var level = preload("res://levels/level1bricks.tscn").instantiate();
+func load_level():
+	var level = load(levelPaths[currentLevel]).instantiate();
 	$BrickArea.add_child(level);
-	
-	
-#func generate_bricks():
-	#generate_brick_row();
-	#
-#func generate_brick_row():
-	#var brickAreaDimensions = $BrickArea/CollisionShape2D.get_shape().size;
-	#
-	##instantiate to get dimensions
-	#var refBrick = brick_scene.instantiate();
-	#var brickDimensions = refBrick.get_node("CollisionShape2D").get_shape().size;
-	#brickDimensions.x = brickAreaDimensions.x / 5;
-#
-	#var brickPosition = 0;
-	#for i in range(ceil(brickAreaDimensions.x / brickDimensions.x)):
-		#var newBrick = brick_scene.instantiate();
-		#var prefix = "brick";
-		#newBrick.name = prefix + str(i)
-		#
-		#$BrickArea.add_child(newBrick);
-		#newBrick.position.x = brickPosition;
-		#brickPosition += brickDimensions.x
-		#
-		#newBrick.add_to_group('bricks');
+	activeBricks = get_tree().get_nodes_in_group('bricks').size();
 	
 func update_score():
 	score += 1;
@@ -57,17 +38,24 @@ func update_lives():
 func update_lives_display():
 	$Lives.text = str(lives);
 	
-
 func start_new_round():
 	$Ball.position = Vector2($Arena.size.x / 2, $Arena.size.y / 2);
-	$Ball.velocity = Vector2(randf_range(-300, 300), ball_velocity if randi_range(0, 1) == 1 else -ball_velocity);
+	$Ball.velocity = Vector2(randf_range(-300, 300), -ball_velocity);
 
 func _on_ball_collided(col):
 	if col.get_collider().is_in_group('bricks'):
-		print('yup')
-		col.get_collider().queue_free();
-		update_score();
+		handle_brick_collision(col.get_collider());
+
+func handle_brick_collision(brick):
+	brick.destroy();
+	activeBricks -= 1;
+	update_score();
 	
+	if(activeBricks == 0):
+		handle_level_complete();
+	
+func handle_level_complete():
+	init_round();
 
 func _on_kill_zone_body_entered(body):
 	update_lives();
