@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://v8r8ys1tc15y"]
+[gd_scene load_steps=9 format=3 uid="uid://v8r8ys1tc15y"]
 
 [ext_resource type="PackedScene" uid="uid://g2mj11lpslje" path="res://ball.tscn" id="1_bgcyt"]
 [ext_resource type="Script" path="res://main.gd" id="1_ryb73"]
@@ -11,10 +11,13 @@ size = Vector2(1011.03, 21)
 size = Vector2(688, 18.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2w5jv"]
-size = Vector2(554, 20)
+size = Vector2(570, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6q05h"]
 size = Vector2(632, 320)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rqa22"]
+font_size = 64
 
 [node name="Main" type="Node"]
 script = ExtResource("1_ryb73")
@@ -54,10 +57,8 @@ position = Vector2(328, -8)
 shape = SubResource("RectangleShape2D_uq53f")
 
 [node name="Lives" type="Label" parent="."]
-offset_left = 32.0
-offset_top = 8.0
-offset_right = 72.0
-offset_bottom = 48.0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Score" type="Label" parent="."]
 anchors_preset = 5
@@ -71,11 +72,11 @@ size_flags_horizontal = 4
 horizontal_alignment = 2
 
 [node name="KillZone" type="Area2D" parent="."]
-position = Vector2(-8, 1008)
+position = Vector2(16, 1008)
 scale = Vector2(1.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
-position = Vector2(273.333, 0)
+position = Vector2(255, 16)
 shape = SubResource("RectangleShape2D_2w5jv")
 
 [node name="BrickArea" type="Area2D" parent="."]
@@ -84,6 +85,24 @@ position = Vector2(8, 64)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BrickArea"]
 position = Vector2(316, 160)
 shape = SubResource("RectangleShape2D_6q05h")
+
+[node name="Message" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -236.0
+offset_top = -75.5
+offset_right = 236.0
+offset_bottom = 75.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game Over!"
+label_settings = SubResource("LabelSettings_rqa22")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="collided" from="Ball" to="." method="_on_ball_collided"]
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
